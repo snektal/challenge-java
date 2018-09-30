@@ -10,12 +10,10 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -28,7 +26,7 @@ import static java.util.stream.Collectors.maxBy;
 
 public class HttpServerAccessLogProcessor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("KotlinAccessLogProcessorApp");
+    private static final Logger LOGGER = LoggerFactory.getLogger("HttpServerAccessLogProcessor");
     private String logFileAbsolutePath;
     private static Function<String, HttpServerAccessLogEntry> logEntryConverter = HttpServerAccessLogEntry::new;
     private static Predicate<String> filterCriteria = line -> !line.startsWith("Path,User,Timestamp");
@@ -80,15 +78,8 @@ public class HttpServerAccessLogProcessor {
 
         List<HttpServerAccessLogEntry> entries = logEntriesGroupedByDate.get(date);
         if (entries != null) {
-//            entries.stream().forEach(e -> {
-//                dailyPagesByNumberOfUsers.computeIfAbsent(e.getPath(), v -> 0);
-//                dailyPagesByNumberOfUsers.compute(e.getPath(), (key, value) -> value + 1);
-//
-//            });
             dailyPagesByNumberOfUsers = entries.stream().collect(groupingBy(HttpServerAccessLogEntry::getPath, counting()));
-//            entries.stream().max(Comparator.comparingInt(e -> e.getPath().length()));
             entries.stream().collect(maxBy(comparing(e -> e.getPath().length())));
-
         }
         return dailyPagesByNumberOfUsers;
     }
