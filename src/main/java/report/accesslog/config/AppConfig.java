@@ -31,7 +31,7 @@ public class AppConfig {
 
     @Bean
     public Docket api(){
-        return new Docket(DocumentationType.SWAGGER_2).groupName("Room").select()
+        return new Docket(DocumentationType.SWAGGER_2).groupName("AccessLog").select()
                 .apis(RequestHandlerSelectors.basePackage("report.accesslog"))
                 .paths(any()).build().apiInfo(new ApiInfo("Server Access Log Report",
                         "A set of services to provide report on server access logs", "1.0.0", null,
